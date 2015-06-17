@@ -1,0 +1,31 @@
+{
+  "name": "sammi",
+  "version": "0.0.1",
+  "description": "Convenient and safe interaction with external services",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/domrein/sammi.git"
+  },
+  "keywords": [
+    "validation",
+    "external",
+    "request"
+  ],
+  "author": "Paul Milham",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/domrein/sammi/issues"
+  },
+  "homepage": "https://github.com/domrein/sammi",
+  "dependencies": {
+    "request": "^2.55.0",
+    "tean": "^1.0.10"
+  }
+}
