@@ -26,6 +26,11 @@ module.exports = {
     options.contentType = options.contentType || "json";
     options.logTag = options.logTag || undefined;
 
+    // pull off first slash if included
+    if (command[0] === "/") {
+      command = command.substr(1);
+    }
+
     while (command.indexOf("??") !== -1) {
       command = command.replace("??", encodeURI(options.commandParams.shift()));
     }
