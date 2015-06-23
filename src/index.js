@@ -57,7 +57,7 @@ module.exports = {
       }
 
       if (err) {
-        let errMsg = `Error contacting ${serviceName} (-${options.method} ${url}) with params (${JSON.stringify(options.bodyParams)})`;
+        let errMsg = `Error contacting ${serviceName} (-${options.method} ${url}) with params (${JSON.stringify(options.bodyParams)}): ${JSON.stringify(err)}`;
         if (exports.logger) {
           exports.logger.error(errMsg, options.logTag);
         }
