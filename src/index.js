@@ -31,9 +31,12 @@ module.exports = {
       command = command.substr(1);
     }
 
-    while (command.indexOf("??") !== -1) {
-      command = command.replace("??", encodeURI(options.commandParams.shift()));
-    }
+    command = command.split("/").map(function(piece) {
+      if (piece === "??") {
+        return piece.replace("??", encodeURI(options.commandParams.shift()));
+      }
+      return piece;
+    }).join("/");
 
     let url = `${this.services[serviceName]}/${command}`;
     let requestData = {uri: url, method: options.method.toUpperCase()};
