@@ -33,7 +33,7 @@ module.exports = {
 
     command = command.split("/").map(function(piece) {
       if (piece === "??") {
-        return piece.replace("??", encodeURI(options.commandParams.shift()));
+        return piece.replace("??", encodeURIComponent(options.commandParams.shift()));
       }
       return piece;
     }).join("/");
