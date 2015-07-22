@@ -28,17 +28,7 @@ module.exports = {
     options.contentType = options.contentType || "json";
     options.logTag = options.logTag || undefined;
 
-    // pull off first slash if included
-    if (command[0] === "/") {
-      command = command.substr(1);
-    }
-
-    command = command.split("/").map(function(piece) {
-      if (piece === "??") {
-        return piece.replace("??", encodeURIComponent(options.commandParams.shift()));
-      }
-      return piece;
-    }).join("/");
+    command = _this.prepareCommand(command, options.commandParams);
 
     let url = `${this.services[serviceName]}/${command}`;
     let requestData = {uri: url, method: options.method.toUpperCase()};
@@ -111,5 +101,30 @@ module.exports = {
         }
       }
     });
+  },
+
+  prepareCommand(command, params) {
+    params = params.concat([]);
+    // pull off first slash if included
+    while (command[0] === "/") {
+      command = command.substr(1);
+    }
+    let pieces = command.split("/");
+    command = pieces.map(function(piece, index) {
+      if (index === pieces.length - 1) {
+        while (piece.indexOf("??") !== -1) {
+          piece = piece.replace("??", encodeURIComponent(params.shift()));
+        }
+        return piece;
+      }
+      else {
+        if (piece === "??") {
+          return piece.replace("??", encodeURIComponent(params.shift()));
+        }
+        return encodeURIComponent(piece);
+      }
+    }).join("/");
+
+    return command;
   },
 };
