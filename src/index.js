@@ -4,7 +4,8 @@ let _request = require("request");
 let _tean = require("tean");
 
 module.exports = {
-  logger: null,
+  infoLogFunction: null,
+  errorLogFunction: null,
   services: {},
 
   register(name, url) {
@@ -17,6 +18,7 @@ module.exports = {
   },
 
   call(serviceName, command, options, callback) {
+    let _this = this;
     options = options || {};
     options.commandParams = options.commandParams || [];
     options.method = options.method || "GET";
@@ -48,12 +50,14 @@ module.exports = {
     }
 
     _request(requestData, function(err, res, body) {
-      // console.log("--------------");
-      // console.log("url: " + url);
-      // console.log("err: " + err);
-      // console.log("res.statusCude: " + res.statusCode);
-      // console.log("body: " + body);
-      // console.log("--------------");
+      if (_this.infoLogFunction) {
+        _this.infoLogFunction("--------------");
+        _this.infoLogFunction("url: " + url);
+        _this.infoLogFunction("err: " + err);
+        _this.infoLogFunction("res.statusCude: " + res.statusCode);
+        _this.infoLogFunction("body: " + body);
+        _this.infoLogFunction("--------------");
+      }
       let statusCode = -1;
       if (res) {
         statusCode = res.statusCode;
@@ -61,15 +65,15 @@ module.exports = {
 
       if (err) {
         let errMsg = `Error contacting ${serviceName} (-${options.method} ${url}) with params (${JSON.stringify(options.bodyParams)}): ${JSON.stringify(err)}`;
-        if (exports.logger) {
-          exports.logger.error(errMsg, options.logTag);
+        if (_this.errorLogFunction) {
+          _this.errorLogFunction(errMsg, options.logTag);
         }
         callback(errMsg, statusCode, body || {});
       }
       else if (options.validResponseCodes.indexOf(statusCode) === -1) {
         let errMsg = `${serviceName} responded to -${options.method} ${url} with params (${JSON.stringify(options.bodyParams)}) with a ${statusCode} error: ${JSON.stringify(body)}`;
-        if (exports.logger) {
-          exports.logger.error(errMsg, options.logTag);
+        if (_this.errorLogFunction) {
+          _this.errorLogFunction(errMsg, options.logTag);
         }
         callback(errMsg, statusCode, body || {});
       }
@@ -78,8 +82,8 @@ module.exports = {
           _tean.object(options.validationMaps[statusCode], body, function(validationPassed, safeData) {
             if (!validationPassed) {
               let errMsg = `${serviceName} (-${options.method} ${url}, ${JSON.stringify(options.bodyParams)}) returned a response body that did not pass validation: ${JSON.stringify(body)}`;
-              if (exports.logger) {
-                exports.logger.error(errMsg, options.logTag);
+              if (_this.errorLogFunction) {
+                _this.errorLogFunction(errMsg, options.logTag);
               }
               callback(errMsg, statusCode, {});
             }
