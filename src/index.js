@@ -16,6 +16,7 @@ module.exports = {
     contentType: "json",
     logTag: undefined,
     camelize: false,
+    "User-Agent": "request",
   },
 
   register(name, host, options) {
@@ -60,6 +61,11 @@ module.exports = {
     options.route = options.route || this.services[serviceName].route;
     options.transport = options.transport || this.services[serviceName].transport;
     options.headers = options.headers || {};
+    Object.assign(options.headers, {
+      Host: options.host,
+      "User-Agent": options["User-Agent"] || this.defaults["User-Agent"],
+    });
+
     if (!options.hasOwnProperty("camelize")) {
       options.camelize = this.defaults.camelize;
     }
