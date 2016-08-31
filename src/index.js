@@ -139,6 +139,15 @@ module.exports = {
           });
           body = JSON.parse(body);
         }
+        // turn body to json
+        else if (body && typeof body === "string") {
+          try {
+            body = JSON.parse(body);
+          }
+          catch (err) {
+          }
+        }
+
 
         if (options.validationMaps && options.validationMaps.hasOwnProperty(statusCode)) {
           _tean.object(options.validationMaps[statusCode], body, (validationPassed, safeData) => {
