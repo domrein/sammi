@@ -13,7 +13,7 @@ module.exports = {
     bodyParams: {},
     validResponseCodes: [200],
     validationMaps: null,
-    contentType: "json",
+    contentType: "application/json",
     logTag: undefined,
     camelize: false,
     "User-Agent": "request",
