@@ -1,6 +1,6 @@
 {
   "name": "sammi",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Convenient and safe interaction with external services",
   "main": "src/index.js",
   "directories": {
