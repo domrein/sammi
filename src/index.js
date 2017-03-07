@@ -13,10 +13,11 @@ module.exports = {
     bodyParams: {},
     validResponseCodes: [200],
     validationMaps: null,
-    contentType: "application/json",
+    contentType: "json",
     logTag: undefined,
     camelize: false,
     "User-Agent": "request",
+    timeout: 3000,
   },
 
   register(name, host, options) {
@@ -61,6 +62,7 @@ module.exports = {
     options.route = options.route || this.services[serviceName].route;
     options.transport = options.transport || this.services[serviceName].transport;
     options.headers = options.headers || {};
+    options.timeout = options.timeout || this.defaults.timeout;
     Object.assign(options.headers, {
       Host: options.host,
       "User-Agent": options["User-Agent"] || this.defaults["User-Agent"],
@@ -81,6 +83,7 @@ module.exports = {
       requestData.form = options.bodyParams;
     }
     requestData.headers = options.headers;
+    requestData.timeout = options.timeout;
 
     _request(requestData, (err, res, body) => {
       if (this.infoLogFunction) {
