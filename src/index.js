@@ -140,7 +140,11 @@ module.exports = {
               return index === 1 ? match.toLowerCase() : match.toUpperCase();
             });
           });
-          body = JSON.parse(body);
+          try {
+            body = JSON.parse(body);
+          }
+          catch (err) {
+          }
         }
         // turn body to json
         else if (body && typeof body === "string") {
